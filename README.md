@@ -12,6 +12,9 @@ http://localhost:8000/docs
 
 *repository pattern if user want to create distinc async db operations
 
+![resim](https://github.com/user-attachments/assets/16c72529-f2d5-4774-8941-b89390f24f97)
+
+
 Example Chat:
 ```
 You:
