@@ -1,14 +1,32 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, FastAPI
 from pydantic import BaseModel
-from app.agent.executor import agent_executor
-from app.agent.executor import run_agent_with_log  
+from app.utils.errors import AppError, app_error_handler
+from app.agent.executor import invoke_agent
+
 chat_router = APIRouter()
 
 class ChatRequest(BaseModel):
     message: str
 
-@chat_router.post("/")
+class ChatResponse(BaseModel):
+    status: str
+    data: dict
+
+@chat_router.post(
+    "/",
+    response_model=ChatResponse,
+    status_code=200,
+    summary="Submit a message to the chatbot"
+)
 async def chat(req: ChatRequest):
-    #result = agent_executor.invoke({"input": req.message})
-    result = run_agent_with_log(req.message)
-    return {"response": result}
+    result = await invoke_agent(req.message)
+    return {
+        "status": "success",
+        "data": {
+            "answer": result
+        }
+    }
+
+# Error handler registration
+def register_error_handlers(app: FastAPI):
+    app.add_exception_handler(AppError, app_error_handler)

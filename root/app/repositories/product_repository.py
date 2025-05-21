@@ -1,19 +1,21 @@
-from sqlalchemy import text
-from app.models.product import ProductInfo
-from app.utils.errors import APIError
-from sqlalchemy.ext.asyncio import AsyncSession
+# app/repositories/product_repository.py
+from app.utils.errors import DatabaseException
+import asyncpg
 
 class ProductRepository:
-    def __init__(self, session: AsyncSession):
-        self.session = session
+    def __init__(self, pool: asyncpg.pool.Pool):
+        self.pool = pool
 
-    async def get_by_name(self, name: str) -> ProductInfo:
+    async def get_by_name(self, name: str):
+        query = """
+        SELECT name, description, price
+        FROM products
+        WHERE name ILIKE $1
+        LIMIT 1
+        """
         try:
-            stmt = text("SELECT name, description, price FROM products WHERE name ILIKE :name LIMIT 1")
-            result = await self.session.execute(stmt, {"name": f"%{name}%"})
-            row = result.fetchone()
-            if not row:
-                raise APIError(f"Product '{name}' not found.")
-            return ProductInfo(name=row[0], description=row[1], price=float(row[2]))
+            async with self.pool.acquire() as conn:
+                result = await conn.fetchrow(query, f"%{name}%")
+                return dict(result) if result else None
         except Exception as e:
-            raise APIError(f"DB query failed: {e}")
+            raise DatabaseException(f"Error querying product by name: {str(e)}")

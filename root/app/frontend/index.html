@@ -1,17 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Agentic Chatbot</title>
-  <link rel="stylesheet" href="/static/style.css">
-  <script src="/static/app.js"></script>
+  <link rel="stylesheet" href="/static/style.css" />
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f9f9fb;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .dark-mode body {
+      background-color: #1e1e2f;
+      color: #f0f0f0;
+    }
+    .chat-container {
+      width: 100%;
+      max-width: 600px;
+      margin-top: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      background: white;
+      overflow: hidden;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .dark-mode .chat-container {
+      background: #2c2c3e;
+    }
+    .chat-header {
+      background-color: #6366f1;
+      color: white;
+      padding: 16px;
+      font-size: 1.2rem;
+      text-align: center;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chat-header button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    #chat-box {
+      padding: 16px;
+      height: 400px;
+      overflow-y: auto;
+      border-bottom: 1px solid #ddd;
+    }
+    .chat-message {
+      margin-bottom: 12px;
+    }
+    .chat-message b {
+      display: block;
+      margin-bottom: 4px;
+      color: #444;
+    }
+    .dark-mode .chat-message b {
+      color: #ddd;
+    }
+    .chat-input {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+    #user-input {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      font-size: 1rem;
+      outline: none;
+      background: white;
+      color: black;
+    }
+    .dark-mode #user-input {
+      background: #1e1e2f;
+      color: #f0f0f0;
+    }
+    button {
+      background-color: #6366f1;
+      color: white;
+      border: none;
+      padding: 0 20px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #4f46e5;
+    }
+    .timestamp {
+      font-size: 0.75rem;
+      color: gray;
+    }
+  </style>
 </head>
 <body>
   <div class="chat-container">
-    <h2>Agentic Chatbot</h2>
+    <div class="chat-header">
+      💬 Agentic Chatbot
+      <button onclick="toggleDarkMode()">🌙</button>
+    </div>
     <div id="chat-box"></div>
-    <input type="text" id="user-input" placeholder="Ask me something...">
-    <button onclick="sendMessage()">Send</button>
+    <div class="chat-input">
+      <input type="text" id="user-input" placeholder="Ask me something..." onkeydown="if(event.key==='Enter') sendMessage()">
+      <button onclick="sendMessage()">Send</button>
+    </div>
   </div>
+
+  <script>
+    let dark = false;
+
+    function toggleDarkMode() {
+      dark = !dark;
+      document.documentElement.classList.toggle("dark-mode", dark);
+    }
+
+    function formatTimestamp() {
+      const now = new Date();
+      return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById("user-input");
+      const chatBox = document.getElementById("chat-box");
+      const message = input.value.trim();
+      if (!message) return;
+
+      chatBox.innerHTML += `<div class="chat-message"><b>You:</b>${message}<div class="timestamp">${formatTimestamp()}</div></div>`;
+      input.value = "";
+
+      const loading = document.createElement("div");
+      loading.className = "chat-message";
+      loading.innerHTML = `<b>Bot:</b> <span id="typing">Typing...</span>`;
+      chatBox.appendChild(loading);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      try {
+        const res = await fetch("/chat/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message })
+        });
+
+        const data = await res.json();
+        let reply = data?.data?.answer ?? "No reply received.";
+
+        if (reply && typeof reply === "object" && reply.output) reply = reply.output;
+
+        loading.innerHTML = `<b>Bot:</b>${reply}<div class="timestamp">${formatTimestamp()}</div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+      } catch (err) {
+        loading.innerHTML = `<b>Bot:</b> Something went wrong.`;
+      }
+    }
+  </script>
 </body>
 </html>

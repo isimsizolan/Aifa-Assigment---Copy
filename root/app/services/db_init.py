@@ -1,15 +1,15 @@
+import asyncpg
+from app.config import get_settings
 
-from pathlib import Path
-from sqlalchemy import text
-from app.services.product_db import engine
+settings = get_settings()
 
-SCHEMA_SQL = Path(__file__).parent.parent / "database" / "schema.sql"
+db_pool = None  # singleton pool
 
-async def init_db() -> None:
-    print("[DB INIT] Executing schema.sql...")
-    print("Schema path:", SCHEMA_SQL)
-    ddl = SCHEMA_SQL.read_text()
-    async with engine.begin() as conn:
-        # execute each statement (split on ;)
-        for stmt in filter(None, (s.strip() for s in ddl.split(";"))):
-            await conn.execute(text(stmt))
+async def init_db_pool():
+    global db_pool
+    if db_pool is None:
+        db_pool = await asyncpg.create_pool(dsn=settings.postgres_url)
+    return db_pool
+
+def get_db_pool():
+    return db_pool
