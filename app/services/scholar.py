@@ -1,6 +1,8 @@
 import httpx
 from app.utils.errors import ExternalAPIException
 
+# Nothing is special about this code, it is just a simple function to fetch research papers from Semantic Scholar
+
 async def get_research_summary(topic: str) -> str:
     try:
         url = f"https://api.semanticscholar.org/graph/v1/paper/search?query={topic}&limit=1&fields=title,abstract"

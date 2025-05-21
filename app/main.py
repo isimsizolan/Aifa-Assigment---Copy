@@ -43,6 +43,7 @@ async def app_error_handler(request: Request, exc: AppError):
         content={"status": "error", "message": exc.message},
     )
 
+# Health check endpoint
 @app.get("/healthz", tags=["System"])
 async def healthcheck():
     pool = get_db_pool()

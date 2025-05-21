@@ -27,6 +27,6 @@ async def chat(req: ChatRequest):
         }
     }
 
-# Error handler registration
+# Error handler registration, ignore syntax warning
 def register_error_handlers(app: FastAPI):
     app.add_exception_handler(AppError, app_error_handler)

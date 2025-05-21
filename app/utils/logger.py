@@ -1,6 +1,8 @@
 import logging
 from functools import wraps
 
+# This code sets up a logger for an application, defining two decorators `log` and `logsync` to log function calls and results.
+
 logger = logging.getLogger("agentic")
 logger.setLevel(logging.INFO)
 

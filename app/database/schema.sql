@@ -1,3 +1,5 @@
+-- Create Scripts
+
 CREATE TABLE IF NOT EXISTS products (
     id BIGSERIAL PRIMARY KEY,
     name TEXT UNIQUE NOT NULL,

@@ -1,6 +1,8 @@
 import httpx
 from app.utils.errors import ExternalAPIException
 
+# Nothing is special about this code, it is just a simple function to fetch weather information from Open Meteo
+
 async def get_weather_info(city: str) -> str:
     try:
         headers = {

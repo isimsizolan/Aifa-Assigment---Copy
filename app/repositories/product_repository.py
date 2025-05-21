@@ -2,6 +2,11 @@
 from app.utils.errors import DatabaseException
 import asyncpg
 
+
+# And example of a repository class that interacts with a PostgreSQL database using asyncpg
+# Queries are parameterized to prevent SQL injection attacks
+# Works asynchronously with asyncpg to allow for non-blocking database operations
+
 class ProductRepository:
     def __init__(self, pool: asyncpg.pool.Pool):
         self.pool = pool

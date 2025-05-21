@@ -3,6 +3,9 @@
 from app.repositories.product_repository import ProductRepository
 from app.utils.errors import DatabaseException
 
+# This uses repositories to interact with the database
+# Not used by now, langchain agent is used instead
+
 async def fetch_product_info(name: str, db_pool) -> str:
     try:
         repo = ProductRepository(db_pool)

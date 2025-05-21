@@ -1,6 +1,8 @@
 from functools import wraps
 from app.utils.errors import AppError
 
+# This code defines two decorators, `catch` and `catchsync`, which are used to handle exceptions in asynchronous and synchronous functions, respectively.
+
 def catch(func):
     @wraps(func)
     async def wrapper(*args, **kwargs):

@@ -3,6 +3,8 @@ from fastapi.responses import JSONResponse
 from starlette.responses import Response
 from starlette.requests import Request as StarletteRequest
 
+# This module defines custom error classes and a global error handler for the FastAPI application.
+
 class AppError(Exception):
     def __init__(self, message: str, status_code: int = 400):
         self.message = message

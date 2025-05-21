@@ -6,6 +6,8 @@ from langchain_groq import ChatGroq
 
 settings = get_settings()
 
+# Initial testing script to check if the APIs are working
+
 print("🔧 Settings:", settings)
 
 # Test Wikipedia

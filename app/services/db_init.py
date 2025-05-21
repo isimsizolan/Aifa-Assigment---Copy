@@ -1,6 +1,8 @@
 import asyncpg
 from app.config import get_settings
 
+# Database initialization
+
 settings = get_settings()
 
 db_pool = None  # singleton pool
