@@ -1,0 +1,28 @@
+# Web framework
+fastapi
+uvicorn[standard]
+
+# LLM & agentic logic
+langchain
+langchain_groq 
+
+# API requests
+requests
+httpx
+
+# PostgreSQL support
+asyncpg
+sqlalchemy
+psycopg2
+
+# Data models and validation
+pydantic
+
+# Environment config
+python-dotenv
+
+# Logging and utilities
+loguru
+
+# Optional: better interactive dev
+ipython
