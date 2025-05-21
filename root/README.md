@@ -1,11 +1,15 @@
 uvicorn app.main:app --reload
 
 http://localhost:8000/
+
 http://localhost:8000/docs  
 
 await async structure (except langchain db agent)
+
 decorator pattern for logging and exception
+
 langchain based dispatcher
+
 repository pattern if user want to create distinc async db operations
 
 Example Chat:
