@@ -1,15 +1,19 @@
 uvicorn app.main:app --reload
 
 http://localhost:8000/
+
 http://localhost:8000/docs  
 
-await async structure (except langchain db agent)
-decorator pattern for logging and exception
-langchain based dispatcher
-repository pattern if user want to create distinc async db operations
+*await async structure (except langchain db agent)
+
+*decorator pattern for logging and exception
+
+*langchain based dispatcher
+
+*repository pattern if user want to create distinc async db operations
 
 Example Chat:
-
+```
 You:
 price of samsung
 16:16
@@ -46,9 +50,10 @@ price of iphone
 Bot:
 The price of an iPhone is 999.99.
 16:18
+```
 
 Example Log:
-
+```
 > Entering new AgentExecutor chain...
 Thought: I need to query the products database for the price of an iphone. 
 Action: ask_sql
@@ -78,8 +83,9 @@ id      name    description     price
 Action: sql_db_query_checker
 Action Input: SELECT price FROM products WHERE name = 'iPhone 13 Pro'```sql
 SELECT price FROM products WHERE name = 'iPhone 13 Pro'
-```Action: sql_db_query
+Action: sql_db_query
 Action Input: SELECT price FROM products WHERE name = 'iPhone 13 Pro'[(Decimal('999.99'),)]Final Answer: 999.99 
 
 
 > Finished chain.
+```
